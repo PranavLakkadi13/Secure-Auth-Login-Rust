@@ -1,0 +1,16 @@
+version: '3.8'
+
+# docker compose up -d --> this command creates the docker i
+
+# so we will running the postgres db in docker 
+services:
+
+  postgres:
+    image: postgres:latest # this pulls the most latest verson of postgres 
+    ports:
+      - "5432:5432"
+    environment:
+    # Since just testing its ok have password and credentials here
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: customer_db
