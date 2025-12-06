@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+actix-cors = "0.7.0"
+actix-web = "4.9.0"
 axum = { version = "0.8.7", features = ["macros"] }
 chrono = "0.4.38"
 diesel = { version = "2.2.2", features = ["postgres", "r2d2"] }
