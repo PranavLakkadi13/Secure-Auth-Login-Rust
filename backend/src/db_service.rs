@@ -47,15 +47,14 @@ impl Dbservice {
         customers::dsl::customers
             .filter(email.eq(login.email))
             .filter(password.eq(login.password))
-            .first::<Customer>(& mut self.pool.get().unwrap())
+            .first::<Customer>(&mut self.pool.get().unwrap())
             .ok()
     }
-
 
     pub fn get_by_memberid(&self, id: i32) -> Option<Customer> {
         customers::dsl::customers
             .filter(member_id.eq(id))
-            .first::<Customer>(& mut self.pool.get().unwrap())
+            .first::<Customer>(&mut self.pool.get().unwrap())
             .ok()
     }
 }
