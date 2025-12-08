@@ -1,5 +1,8 @@
 use actix_web::{
-    HttpRequest, HttpResponse, cookie::{Cookie, time::Duration}, post, web::{Data, Json}
+    HttpRequest, HttpResponse,
+    cookie::{Cookie, time::Duration},
+    post,
+    web::{Data, Json},
 };
 
 use crate::{
@@ -51,21 +54,27 @@ pub async fn login_user(db: Data<Dbservice>, login: Json<Login>) -> HttpResponse
     }
 }
 
-
 // we will redirect user to the profile page once is loggedin and the cookie is passed in the request
-#[post("/profile")] 
+#[post("/profile")]
 pub async fn profile(db: Data<Dbservice>, request: HttpRequest) -> HttpResponse {
     if let Some(cookie) = request.cookie("token") {
         match decode_jwt(cookie.value(), "MY secret DEV") {
             Ok(token_data) => {
-                if is_valid(token_data.&claims) {
-                    match db.get_by_memberid(&token_data.claims.sub) {
-                        Some()
+                if is_valid(&token_data.claims) {
+                    match db.get_by_memberid(token_data.claims.sub) {
+                        None => HttpResponse::NotFound().body("not found..."),
+                        Some(data) => HttpResponse::Ok().json(data.to_response()),
                     }
+                } else {
+                    HttpResponse::Unauthorized().body("Unathorized")
                 }
             }
+            Err(e) => {
+                eprintln!("The error in decoding the data {:?}", e);
+                HttpResponse::Unauthorized().body("Invalid token")
+            }
         }
+    } else {
+        HttpResponse::Unauthorized().body("Cookie not found")
     }
-
-    todo!()
 }
